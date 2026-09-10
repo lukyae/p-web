@@ -7,6 +7,8 @@ dialog.querySelector('.close').addEventListener('click',()=>dialog.close());dial
 
 // Display each project in its own frame above the archive.
 if(document.querySelector('[data-page="main"]')){
+ const siteBase=new URL(document.baseURI);
+ const sitePath=path=>new URL(path.replace(/^\//,''),siteBase);
  const modal=document.createElement('dialog');modal.className='project-overlay';modal.setAttribute('aria-label','Project details');
  modal.innerHTML='<button class="project-close" aria-label="Close project">×</button><iframe title="Project details"></iframe>';
  document.body.append(modal);const frame=modal.querySelector('iframe');
@@ -21,25 +23,25 @@ if(document.querySelector('[data-page="main"]')){
  function openProject(path,a,push=true){
   trigger=a||trigger;
   if(!modal.open){freeze();overflow=document.body.style.overflow;document.body.style.overflow='hidden';modal.showModal();}
-  if(push)history.pushState({archiveOverlay:true,path},'',`/?project=${encodeURIComponent(path.slice(1))}`);
+  if(push){const url=sitePath(`?project=${encodeURIComponent(path.slice(1))}`);history.pushState({archiveOverlay:true,path},'',url.pathname+url.search);}
   modal.querySelector('button').focus();
-  frame.src=path;
+  frame.src=sitePath(path).href;
   if(a&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const r=a.getBoundingClientRect(),b=modal.getBoundingClientRect();modal.animate([{transform:`translate(${r.x+r.width/2-b.x-b.width/2}px,${r.y+r.height/2-b.y-b.height/2}px) scale(.25)`,opacity:0},{transform:'none',opacity:1}],{duration:240,easing:'ease-out'});}
  }
  frame.addEventListener('load',()=>{modal.classList.remove('image-open');try{frame.contentDocument.documentElement.classList.add('embedded-project');document.title=frame.contentDocument.title;}catch{}});
  window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==frame.contentWindow||event.data?.type!=='archive-lightbox')return;modal.classList.toggle('image-open',event.data.open)});
- modal.addEventListener('close',()=>{frame.src='about:blank';frozen.forEach(([img,src])=>img.src=src);frozen=[];document.body.style.overflow=overflow;document.title=homeTitle;trigger?.focus({preventScroll:true});if(history.state?.archiveOverlay)history.replaceState(null,'','/');});
+ modal.addEventListener('close',()=>{frame.src='about:blank';frozen.forEach(([img,src])=>img.src=src);frozen=[];document.body.style.overflow=overflow;document.title=homeTitle;trigger?.focus({preventScroll:true});if(history.state?.archiveOverlay)history.replaceState(null,'',siteBase.pathname);});
  modal.querySelector('button').addEventListener('click',()=>modal.close());
  modal.addEventListener('cancel',e=>{e.preventDefault();modal.close()});
  window.addEventListener('popstate',()=>{if(history.state?.archiveOverlay)openProject(history.state.path,null,false);else if(modal.open)modal.close()});
  document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||a.target==='_blank'||a.hasAttribute('data-full-page'))return;
-  const url=new URL(a.href);if(url.origin!==location.origin)return;const path=url.pathname.replace(/\/$/,'')||'/';
+  const url=new URL(a.href);if(url.origin!==location.origin)return;const basePath=siteBase.pathname.replace(/\/$/,'');const path=(url.pathname.startsWith(basePath)?url.pathname.slice(basePath.length):url.pathname).replace(/\/$/,'')||'/';
   if(modal.contains(a)&&(path==='/'||path==='/main')){e.preventDefault();modal.close();return;}
   if(!routes.includes(path))return;e.preventDefault();openProject(path,a);
  });
  const requestedProject=new URLSearchParams(location.search).get('project');const requestedPath=requestedProject&&'/'+requestedProject;
  if(routes.includes(requestedPath))openProject(requestedPath,null,false);
 }else if(window.top===window){
- const project=location.pathname.replace(/^\/+|\/+$/g,'');
- if(project&&project!=='main')location.replace(`/?project=${encodeURIComponent(project)}`);
+ const basePath=new URL(document.baseURI).pathname.replace(/\/$/,'');const project=(location.pathname.startsWith(basePath)?location.pathname.slice(basePath.length):location.pathname).replace(/^\/+|\/+$/g,'');
+ if(project&&project!=='main')location.replace(new URL(`?project=${encodeURIComponent(project)}`,document.baseURI));
 }

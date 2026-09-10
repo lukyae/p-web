@@ -4,7 +4,7 @@
   font-family: "H Yh1gj";
   font-weight: 400;
   font-style: normal;
-  src: url("/assets/R2592944229096350527783278612182-HanYiWeiBeiJian-1.woff") format("woff");
+  src: url("assets/R2592944229096350527783278612182-HanYiWeiBeiJian-1.woff") format("woff");
 }
 
 html {
@@ -454,7 +454,7 @@ body.mobile audio-player {
 .mobile .content {
 }
 bodycopy{font-family:"H Yh1gj",Georgia,serif}h1,.texttext{font-family:"Sorts Mill Goudy",Georgia,serif}.texttext{border:0!important}.caption{font-family:Georgia,serif}figure .caption{display:block;text-align:left}figure .caption:empty{display:none}span[style*="--font-scale"]{font-size:calc(1em*var(--font-scale))}.icon-link{font-family:Georgia,serif;font-size:16px}.bio{font-family:Arial,sans-serif}.page-layout{margin-top:0;margin-bottom:0}.page-content{min-height:100vh}body:has(.wallpaper) .page-content{backdrop-filter:blur(2px)}@media(max-width:600px){html{font-size:10px}.page .page-layout{max-width:100%!important}.page-content{padding:2rem}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery-columnized{column-count:2}gallery-freeform .freeform-item{position:relative;left:auto;top:auto;width:100%;margin:0 auto 4rem;display:block}gallery-freeform{height:auto!important}.texttext{border-width:0!important}.bio{font-size:1.5rem}column-set[mobile-stack="true"]{display:block}}
-@font-face{font-family:"Sorts Mill Goudy";font-style:normal;font-weight:400;font-display:swap;src:url("/assets/sorts-mill-goudy.ttf") format("truetype")}html{font-size:clamp(8px,.81vw,18px)}@media(max-width:600px){html{font-size:10px}}
+@font-face{font-family:"Sorts Mill Goudy";font-style:normal;font-weight:400;font-display:swap;src:url("assets/sorts-mill-goudy.ttf") format("truetype")}html{font-size:clamp(8px,.81vw,18px)}@media(max-width:600px){html{font-size:10px}}
 .text-icon{font-family:Arial,sans-serif;font-size:1.8rem!important;padding:0 .15rem}figure .caption{margin-top:.5em}
 .home-icon{display:inline-block;font-size:24px;line-height:1.4}a:has(.home-icon){text-decoration:none}
 
